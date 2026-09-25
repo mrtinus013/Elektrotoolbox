@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="nl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#06111d">
+  <meta name="description" content="ElektroToolbox combineert elektrotechnische calculators, kabelfoutanalyse, metingen en projectrapportage in één snelle webapp.">
+  <title>ElektroToolbox — rekenen, lokaliseren, rapporteren</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.css?v=6.1.1">
+  <link rel="stylesheet" href="assets/v5-futuristic.css?v=6.1.1">
+  <link rel="stylesheet" href="assets/v6-hyperfield.css?v=6.1.1">
+</head>
+<body class="site-body">
+  <div class="app-bg" aria-hidden="true"></div>
+  <div class="v5-fx" aria-hidden="true"><span class="v5-orb orb-a"></span><span class="v5-orb orb-b"></span><span class="v5-orb orb-c"></span><span class="v5-grid"></span><span class="v5-scan"></span><span class="v5-noise"></span></div>
+  <header class="site-header"><div class="site-shell">
+    <a class="brand" href="index.html"><span class="brand-mark"><span>⚡</span></span><span><b>Elektro</b>Toolbox <small>v6.1</small></span></a>
+    <nav class="site-nav"><a href="#functies">Functies</a><a href="#workflow">Werkwijze</a><a href="privacy.html">Privacy</a><a class="btn btn-primary btn-compact" href="app.html">Open app</a></nav>
+  </div></header>
+
+  <main>
+    <section class="site-shell hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Gebouwd voor het veld</span>
+        <h1>Van meting naar <span>antwoord.</span><br>Van antwoord naar rapport.</h1>
+        <p>ElektroToolbox brengt praktische elektrotechnische calculators, begeleide kabelfoutanalyse, PhaseSync-trafo-koppeling, losse meetwaarden en projectrapportage samen in één snelle, offline-ready webapp.</p>
+        <div class="hero-actions"><a class="btn btn-primary btn-large" href="app.html">Start ElektroToolbox →</a><a class="btn btn-secondary btn-large" href="#functies">Bekijk functies</a></div>
+        <div class="hero-proof"><span>✓ Geen account nodig in pilot</span><span>✓ Lokale opslag</span><span>✓ Werkt als PWA</span><span>✓ Universeel responsive</span></div>
+      </div>
+      <div class="card hero-preview" aria-hidden="true">
+        <div class="preview-top"><span class="preview-dot"></span><span class="preview-dot"></span><span class="preview-dot"></span></div>
+        <div class="preview-screen">
+          <span class="preview-label">KABELFOUT ASSISTENT</span>
+          <div class="preview-title">Lusmethode</div>
+          <div class="preview-metrics"><div><small>Foutafstand</small><strong>281,1 m</strong></div><div><small>Totale lengte</small><strong>329,1 m</strong></div></div>
+          <div class="preview-cable"></div>
+          <div class="preview-metrics"><div><small>Uv2 automatisch</small><strong>2,10 V</strong></div><div><small>Project</small><strong>Direct opslaan</strong></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section" id="functies"><div class="site-shell">
+      <div class="section-title"><span class="eyebrow">Eén gereedschapskist</span><h2>Niet alleen rekenen. Het hele technische spoor vastleggen.</h2><p>Elke uitkomst kan onderdeel worden van een projectdossier. Daardoor hoef je geen screenshots, losse notities en spreadsheets meer bij elkaar te zoeken.</p></div>
+      <div class="feature-grid">
+        <article class="card feature-card"><span>∑</span><h3>25 calculators</h3><p>Van Wet van Ohm en spanningsval tot TDR-afstand, aderbreuk uit capaciteit, nulstroom, motorstroom en trafo-uk%, tapstand-effect en parallel load-share.</p></article>
+        <article class="card feature-card"><span>⌁</span><h3>Guided Kabelfout</h3><p>Lus- en directe methode met visueel stappenplan, dynamische meetpunten voor Uv1/Uv2/Uvt en schema’s voor fase-fase, fase-nul en fase-aarde/mantel.</p></article>
+        <article class="card feature-card"><span>◫</span><h3>Meetwaarden</h3><p>Leg spanning, stroom, impedantie, isolatie, aardweerstand en vrije metingen vast inclusief meetpunt en beoordeling.</p></article>
+        <article class="card feature-card"><span>▦</span><h3>Projectdossiers</h3><p>Bundel berekeningen, foutanalyses en metingen per opdracht, kabel of object en exporteer een back-up.</p></article>
+        <article class="card feature-card"><span>⟳</span><h3>TrafoLab + PhaseSync</h3><p>Vectorgroepen, klokgetallen, uk%-Ik, 12-klokken routematrix en een interactieve HV/LV-aansluitassistent met instelbare fasekleuren.</p></article><article class="card feature-card"><span>▤</span><h3>MeetRapport</h3><p>Een rustige, printvriendelijke rapportweergave met projectgegevens, resultaten, conclusie en technicus.</p></article>
+        <article class="card feature-card"><span>◈</span><h3>HyperLab</h3><p>Live driefasen-WaveScope, SequenceScope, TDR Pulse Studio en veldmodi zoals Wake Lock, Glove Mode en Sunlight Mode.</p></article>
+        <article class="card feature-card"><span>↯</span><h3>Offline-ready</h3><p>De pilot werkt local-first en kan als PWA worden geïnstalleerd. Projectgegevens gaan niet automatisch naar een server.</p></article>
+      </div>
+    </div></section>
+
+    <section class="site-section" id="workflow"><div class="site-shell">
+      <div class="section-title"><span class="eyebrow">Werkstroom</span><h2>Vier stappen. Eén dossier.</h2></div>
+      <div class="card workflow-band"><div><small>01</small><h3>Maak project</h3><p>Voeg opdrachtgever, locatie, referentie, kabel/object en technicus toe.</p></div><div><small>02</small><h3>Bereken & meet</h3><p>Gebruik de calculator of leg direct een losse meetwaarde vast.</p></div><div><small>03</small><h3>Lokaliseer</h3><p>Bereken een foutafstand en voeg het resultaat toe aan hetzelfde project.</p></div><div><small>04</small><h3>Rapporteer</h3><p>Print of bewaar het project als PDF vanuit de rapportweergave.</p></div></div>
+    </div></section>
+
+    <section class="site-section"><div class="site-shell"><div class="card cta-card"><div><span class="eyebrow">Hyperfield v6</span><h2>Open de toolbox en probeer hem op je telefoon.</h2><p>Geen account. Geen server. Eerst bewijzen dat het gereedschap prettig werkt.</p></div><a class="btn btn-primary btn-large" href="app.html">Open ElektroToolbox</a></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="site-shell"><span>© 2026 ElektroToolbox — pilot</span><nav><a href="privacy.html">Privacy</a><a href="voorwaarden.html">Voorwaarden</a><a href="app.html">App</a></nav></div></footer>
+  <script>if(localStorage.getItem('elektrotoolbox_v6')||localStorage.getItem('elektrotoolbox_v5')||localStorage.getItem('elektrotoolbox_v4')||localStorage.getItem('elektrotoolbox_v3')||localStorage.getItem('elektrotoolbox_v2')){try{const s=JSON.parse(localStorage.getItem('elektrotoolbox_v6')||localStorage.getItem('elektrotoolbox_v5')||localStorage.getItem('elektrotoolbox_v4')||localStorage.getItem('elektrotoolbox_v3')||localStorage.getItem('elektrotoolbox_v2'));document.documentElement.dataset.theme=s.settings?.theme==='light'?'light':'dark';}catch(e){}}</script>
+</body>
+</html>

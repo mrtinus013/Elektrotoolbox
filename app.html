@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="nl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#06111d">
+  <meta name="description" content="ElektroToolbox — calculators, kabelfoutanalyse en meetrapportage voor elektrotechnici.">
+  <title>ElektroToolbox v6.1 — Hyperfield Edition</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.css?v=6.1.1">
+  <link rel="stylesheet" href="assets/v5-futuristic.css?v=6.1.1">
+  <link rel="stylesheet" href="assets/v6-hyperfield.css?v=6.1.1">
+</head>
+<body class="app-body">
+  <div class="app-bg" aria-hidden="true"></div>
+  <div class="v5-fx" aria-hidden="true">
+    <span class="v5-orb orb-a"></span><span class="v5-orb orb-b"></span><span class="v5-orb orb-c"></span>
+    <span class="v5-grid"></span><span class="v5-scan"></span><span class="v5-noise"></span>
+  </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="ElektroToolbox startpagina">
+        <span class="brand-mark" aria-hidden="true"><span>⚡</span></span>
+        <span><b>Elektro</b>Toolbox <small>v6.1</small></span>
+      </a>
+      <div class="project-switcher">
+        <label for="projectSwitcher">Actief project</label>
+        <select id="projectSwitcher" aria-label="Actief project"></select>
+      </div>
+      <div class="top-actions">
+        <div class="v5-system-pill" aria-label="Systeemstatus"><i></i><span>FIELD OS</span><b id="hudClock">--:--</b></div>
+        <button class="icon-btn v5-command-trigger" id="commandTrigger" title="Snelmenu (Ctrl/⌘ K)" aria-label="Open snelmenu">⌘</button>
+        <button class="icon-btn" id="themeToggle" title="Thema wisselen" aria-label="Thema wisselen">◐</button>
+        <button class="btn btn-primary btn-compact" id="newProjectTop">+ Project</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Hoofdnavigatie">
+      <nav class="nav-stack">
+        <button class="nav-item active" data-view="dashboard"><span>⌂</span><b>Dashboard</b></button>
+        <button class="nav-item" data-view="calculators"><span>∑</span><b>Calculators</b></button>
+        <button class="nav-item" data-view="fault"><span>⌁</span><b>Kabelfout</b></button>
+        <button class="nav-item" data-view="transformers"><span>⟳</span><b>TrafoLab</b></button>
+        <button class="nav-item" data-view="measurements"><span>◫</span><b>Metingen</b></button>
+        <button class="nav-item" data-view="projects"><span>▦</span><b>Projecten</b></button>
+        <button class="nav-item" data-view="report"><span>▤</span><b>Rapport</b></button>
+        <button class="nav-item" data-view="settings"><span>⚙</span><b>Instellingen</b></button>
+      </nav>
+      <div class="sidebar-card">
+        <div class="online-row"><span class="status-dot"></span><span>Offline-ready</span></div>
+        <p>Projectdata blijft lokaal op dit apparaat totdat jij exporteert of deelt.</p>
+      </div>
+    </aside>
+
+    <main class="main-panel" id="mainPanel">
+      <section class="view active" id="view-dashboard">
+        <div class="page-head">
+          <div>
+            <span class="eyebrow">Veldgereedschap</span>
+            <h1 id="welcomeTitle">Goedemiddag</h1>
+            <p>Rekenen, lokaliseren en rapporteren vanuit één werkstroom.</p>
+          </div>
+          <div class="head-actions">
+            <button class="btn btn-secondary" data-view-jump="calculators">Open calculator</button>
+            <button class="btn btn-primary" data-view-jump="fault">Kabelfout meten</button>
+          </div>
+        </div>
+
+        <div class="hero-dashboard card premium-card">
+          <div>
+            <span class="micro-label">ACTIEF PROJECT</span>
+            <h2 id="dashProjectName">Nog geen project geselecteerd</h2>
+            <p id="dashProjectMeta">Maak een project om berekeningen en metingen samen te brengen.</p>
+            <div class="hero-dashboard-actions">
+              <button class="btn btn-primary" id="dashProjectAction">Nieuw project</button>
+              <button class="btn btn-ghost" data-view-jump="report">Rapport bekijken →</button>
+            </div>
+          </div>
+          <div class="project-score">
+            <div class="score-ring" id="scoreRing"><strong id="dashEntryCount">0</strong><span>items</span></div>
+            <div><small>Projectdossier</small><b id="dashLastSaved">Nog leeg</b></div>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <article class="stat-card card"><span class="stat-icon">∑</span><div><small>Berekeningen</small><strong id="statCalcs">0</strong></div></article>
+          <article class="stat-card card"><span class="stat-icon">◫</span><div><small>Metingen</small><strong id="statMeasurements">0</strong></div></article>
+          <article class="stat-card card"><span class="stat-icon">▦</span><div><small>Projecten</small><strong id="statProjects">0</strong></div></article>
+          <article class="stat-card card"><span class="stat-icon">↯</span><div><small>Kabelfoutanalyses</small><strong id="statFaults">0</strong></div></article>
+        </div>
+
+        <div class="dashboard-columns">
+          <section class="card section-card">
+            <div class="section-card-head"><div><span class="micro-label">SNEL STARTEN</span><h2>Werkstroom</h2></div></div>
+            <div class="workflow-list">
+              <button class="workflow-item" data-view-jump="calculators"><span class="workflow-num">01</span><div><b>Bereken</b><small>25 praktische elektrotechnische tools</small></div><span>→</span></button>
+              <button class="workflow-item" data-view-jump="fault"><span class="workflow-num">02</span><div><b>Lokaliseer</b><small>Lusmethode en directe methode</small></div><span>→</span></button>
+              <button class="workflow-item" data-view-jump="transformers"><span class="workflow-num">03</span><div><b>TrafoLab</b><small>Vectorgroepen, klokgetallen en trafo-berekeningen</small></div><span>→</span></button>
+              <button class="workflow-item" data-view-jump="measurements"><span class="workflow-num">04</span><div><b>Leg vast</b><small>Meetwaarden, notities en beoordeling</small></div><span>→</span></button>
+              <button class="workflow-item" data-view-jump="report"><span class="workflow-num">05</span><div><b>Rapporteer</b><small>Maak een professioneel projectrapport</small></div><span>→</span></button>
+            </div>
+          </section>
+          <section class="card section-card">
+            <div class="section-card-head"><div><span class="micro-label">RECENT</span><h2>Laatste activiteit</h2></div><button class="text-btn" id="clearHistoryBtn">Wissen</button></div>
+            <div id="recentActivity" class="activity-list"></div>
+          </section>
+        </div>
+
+        <div class="safety-banner">
+          <strong>Technische controle blijft leidend.</strong>
+          <span>ElektroToolbox ondersteunt berekeningen en verslaglegging, maar vervangt geen geldende veiligheids-, bedrijfs- of normprocedures.</span>
+        </div>
+      </section>
+
+      <section class="view" id="view-calculators">
+        <div class="page-head">
+          <div><span class="eyebrow">Toolbox</span><h1>Calculators</h1><p>Snel, reproduceerbaar en met één tik aan je project toe te voegen.</p></div>
+        </div>
+        <div class="tool-toolbar card">
+          <div class="search-box"><span>⌕</span><input id="calculatorSearch" type="search" placeholder="Zoek bijvoorbeeld spanningsval, cos φ of trafo…"></div>
+          <div class="filter-chips" id="calculatorFilters">
+            <button class="chip active" data-filter="all">Alles</button>
+            <button class="chip" data-filter="basis">Basis</button>
+            <button class="chip" data-filter="kabel">Kabel</button>
+            <button class="chip" data-filter="vermogen">Vermogen</button>
+            <button class="chip" data-filter="net">Net</button>
+          </div>
+        </div>
+        <div class="calculator-grid" id="calculatorGrid"></div>
+      </section>
+
+      <section class="view" id="view-fault">
+        <div class="page-head">
+          <div><span class="eyebrow">Foutlokalisatie</span><h1>Kabelfout Assistent</h1><p>Een begeleide rekenmodule voor bekende meetopstellingen.</p></div>
+          <button class="btn btn-secondary" id="faultHelpBtn">Hoe werkt dit?</button>
+        </div>
+        <div class="method-tabs" role="tablist">
+          <button class="active" data-method="loop">Lusmethode</button>
+          <button data-method="direct">Directe methode</button>
+        </div>
+        <div class="fault-workspace">
+          <section class="card fault-form-card">
+            <div class="fault-guide" id="faultGuide">
+              <div class="fault-guide-head">
+                <div><span class="micro-label">BEGELEIDE VELDMODUS</span><h3 id="faultGuideTitle">Stap voor stap aansluiten</h3><p id="faultGuideText">Kies eerst foutpad, aders en meetzijde.</p></div>
+                <span class="guide-counter" id="faultGuideCounter">1 / 6</span>
+              </div>
+              <div class="guide-steps" id="faultGuideSteps"></div>
+              <div class="guide-actions"><button class="btn btn-secondary" id="faultGuidePrev" type="button">← Vorige</button><button class="btn btn-primary" id="faultGuideNext" type="button">Volgende →</button></div>
+            </div>
+            <div class="method active" id="method-loop">
+              <div class="method-title"><div><span class="step-badge">LUS</span><h2>Lusmethode</h2></div><span class="formula-pill">Uv2 = Uvt/2 − Uv1</span></div>
+              <p class="muted">Uv1 en totale lusspanning Uvt zijn de primaire meetwaarden. Uv2 wordt automatisch afgeleid.</p>
+              <div class="field-grid">
+                <label class="field"><span>Meetstroom I</span><div class="input-unit"><input id="lf_i" inputmode="decimal" type="number" value="10" step="0.01"><em>A</em></div></label>
+                <label class="field"><span>Totale lusspanning Uvt</span><div class="input-unit"><input id="lf_uvt" inputmode="decimal" type="number" value="28.8" step="0.001"><em>V</em></div></label>
+                <label class="field"><span>Uv1</span><div class="input-unit"><input id="lf_uv1" inputmode="decimal" type="number" value="12.3" step="0.001"><em>V</em></div></label>
+                <label class="field readonly"><span>Uv2 automatisch</span><div class="input-unit"><input id="lf_uv2" type="text" readonly><em>V</em></div></label>
+                <label class="field"><span>Geleider</span><select id="lf_material"><option value="copper">Koper</option><option value="aluminum">Aluminium</option></select></label>
+                <label class="field"><span>Doorsnede</span><div class="input-unit"><input id="lf_area" inputmode="decimal" type="number" value="4"><em>mm²</em></div></label>
+              </div>
+              <div class="form-actions"><button class="btn btn-primary btn-large" id="calcLoopBtn">Bereken foutafstand</button><button class="btn btn-secondary" id="saveLoopBtn">+ Project</button></div>
+              <div class="inline-result" id="loopResult"><span>Vul de meetwaarden in.</span></div>
+            </div>
+
+            <div class="method" id="method-direct">
+              <div class="method-title"><div><span class="step-badge">DIRECT</span><h2>Directe methode</h2></div><span class="formula-pill">ΔU / I → R → afstand</span></div>
+              <p class="muted">Voor de afgesproken tweedraads meetopstelling. Controleer altijd of jouw aansluiting overeenkomt met deze rekenwijze.</p>
+              <div class="field-grid">
+                <label class="field"><span>Meetstroom I</span><div class="input-unit"><input id="df_i" inputmode="decimal" type="number" value="10" step="0.01"><em>A</em></div></label>
+                <label class="field"><span>U1</span><div class="input-unit"><input id="df_u1" inputmode="decimal" type="number" value="3.2" step="0.001"><em>V</em></div></label>
+                <label class="field"><span>U2</span><div class="input-unit"><input id="df_u2" inputmode="decimal" type="number" value="1.9" step="0.001"><em>V</em></div></label>
+                <label class="field"><span>Geleider</span><select id="df_material"><option value="copper">Koper</option><option value="aluminum">Aluminium</option></select></label>
+                <label class="field"><span>Doorsnede</span><div class="input-unit"><input id="df_area" inputmode="decimal" type="number" value="150"><em>mm²</em></div></label>
+              </div>
+              <div class="form-actions"><button class="btn btn-primary btn-large" id="calcDirectBtn">Bereken foutafstand</button><button class="btn btn-secondary" id="saveDirectBtn">+ Project</button></div>
+              <div class="inline-result" id="directResult"><span>Vul de meetwaarden in.</span></div>
+            </div>
+          </section>
+
+          <div class="fault-side-stack">
+            <section class="card fault-schema-card">
+              <div class="cable-card-head"><div><span class="micro-label">INTERACTIEF AANSLUITSCHEMA</span><h2>Meetopstelling</h2></div><span class="result-badge" id="schemaBadge">Fase-fase</span></div>
+              <div class="schema-controls schema-controls-five">
+                <label class="mini-field"><span>Foutpad</span><select id="faultPath"><option value="phase-phase">Fase-fase</option><option value="phase-neutral">Fase-nul</option><option value="phase-earth">Fase-aarde/mantel</option></select></label>
+                <label class="mini-field"><span>Stroom-/foutader</span><select id="faultConductor"><option>L1</option><option selected>L2</option><option>L3</option></select></label>
+                <label class="mini-field" id="referenceConductorWrap"><span>Meetreferentie</span><select id="referenceConductor"><option>L1</option><option>L2</option><option selected>L3</option></select></label>
+                <label class="mini-field" id="healthyConductorWrap"><span>Gezonde lusader</span><select id="healthyConductor"><option selected>L1</option><option>L2</option><option>L3</option></select></label>
+                <label class="mini-field"><span>Meten vanaf</span><select id="measureSide"><option value="A">Zijde A</option><option value="B">Zijde B</option></select></label>
+              </div>
+              <div id="faultConnectionDiagram" class="fault-connection-diagram" aria-label="Interactief aansluitschema"></div>
+              <div class="schema-legend" id="schemaLegend"></div>
+              <div class="fault-measure-map" id="faultMeasureMap"></div>
+            </section>
+            <section class="card cable-card">
+              <div class="cable-card-head"><div><span class="micro-label">VISUELE POSITIE</span><h2>Foutpositie</h2></div><span class="result-badge" id="faultMethodBadge">Lusmethode</span></div>
+              <div class="cable-stage">
+                <div class="cable-end start">ZIJDE A</div>
+                <div class="cable-track"><div class="cable-progress" id="cableProgress"></div><div class="fault-pin" id="faultPin"><span>⚡</span></div></div>
+                <div class="cable-end end">ZIJDE B</div>
+              </div>
+              <div class="fault-kpis">
+                <div><small>Foutafstand</small><strong id="faultDistance">—</strong></div>
+                <div><small>Totale lengte</small><strong id="faultTotal">—</strong></div>
+                <div><small>Positie</small><strong id="faultPercent">—</strong></div>
+                <div><small>Materiaal</small><strong id="faultMaterial">—</strong></div>
+              </div>
+              <div class="measurement-checks" id="faultChecks"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-transformers">
+        <div class="page-head">
+          <div><span class="eyebrow">Transformatoren</span><h1>TrafoLab</h1><p>Vectorgroepen, klokgetallen, wikkelconfiguraties en praktische trafo-berekeningen in één interactieve werkbank.</p></div>
+          <button class="btn btn-secondary" id="saveTrafoBtn">+ Project</button>
+        </div>
+
+        <div class="preset-strip card">
+          <div><span class="micro-label">SNELKEUZE</span><b>Vectorgroepen</b></div>
+          <div class="preset-chips" id="vectorPresets">
+            <button data-vector="Dyn11" class="chip active">Dyn11</button><button data-vector="Dyn5" class="chip">Dyn5</button><button data-vector="Dyn7" class="chip">Dyn7</button><button data-vector="Dyn1" class="chip">Dyn1</button>
+            <button data-vector="YNd11" class="chip">YNd11</button><button data-vector="YNd5" class="chip">YNd5</button><button data-vector="Yyn0" class="chip">Yyn0</button><button data-vector="Yyn6" class="chip">Yyn6</button><button data-vector="Dd0" class="chip">Dd0</button><button data-vector="Dd6" class="chip">Dd6</button>
+          </div>
+        </div>
+
+        <div class="trafo-layout">
+          <section class="card trafo-control-card">
+            <div class="section-card-head"><div><span class="micro-label">VECTORGROEP</span><h2>Opbouw</h2></div><span class="vector-designation" id="vectorDesignation">Dyn11</span></div>
+            <div class="field-grid">
+              <label class="field"><span>HV-schakeling</span><select id="tv_hv"><option value="D">D — driehoek</option><option value="Y">Y — ster</option><option value="Z">Z — zigzag</option></select></label>
+              <label class="field"><span>HV-nulpunt uitgevoerd</span><select id="tv_hvn"><option value="0">Nee</option><option value="1">Ja (N)</option></select></label>
+              <label class="field"><span>LV-schakeling</span><select id="tv_lv"><option value="y">y — ster</option><option value="d">d — driehoek</option><option value="z">z — zigzag</option></select></label>
+              <label class="field"><span>LV-nulpunt uitgevoerd</span><select id="tv_lvn"><option value="1">Ja (n)</option><option value="0">Nee</option></select></label>
+              <label class="field full"><span>Klokgetal</span><div class="clock-slider-row"><input id="tv_clock" type="range" min="0" max="11" step="1" value="11"><strong id="clockValue">11</strong></div></label>
+            </div>
+            <div class="trafo-explain" id="vectorExplain"></div>
+          </section>
+
+          <section class="card clock-card">
+            <div class="section-card-head"><div><span class="micro-label">FASOREN</span><h2>Klokdiagram</h2></div><span class="result-badge" id="phaseShiftBadge">+30°</span></div>
+            <div id="vectorClock" class="vector-clock"></div>
+          </section>
+
+          <section class="card winding-card">
+            <div class="section-card-head"><div><span class="micro-label">WIKKELINGEN</span><h2>Aansluiting</h2></div></div>
+            <div class="winding-panels"><div><small>HV</small><div id="hvWinding"></div></div><div class="trafo-core-symbol"><span>║</span><span>║</span></div><div><small>LV</small><div id="lvWinding"></div></div></div>
+          </section>
+
+          <section class="card trafo-calc-card">
+            <div class="section-card-head"><div><span class="micro-label">TYPEPLAAT</span><h2>Nominale gegevens</h2></div></div>
+            <div class="field-grid">
+              <label class="field"><span>Vermogen</span><div class="input-unit"><input id="tr_kva" type="number" value="630" step="1"><em>kVA</em></div></label>
+              <label class="field"><span>HV lijnspanning</span><div class="input-unit"><input id="tr_hv" type="number" value="10000" step="1"><em>V</em></div></label>
+              <label class="field"><span>LV lijnspanning</span><div class="input-unit"><input id="tr_lv" type="number" value="400" step="1"><em>V</em></div></label>
+              <label class="field"><span>uk</span><div class="input-unit"><input id="tr_uk" type="number" value="6" step="0.1"><em>%</em></div></label>
+            </div>
+            <div class="trafo-kpis" id="trafoKpis"></div>
+            <p class="micro-note">Kortsluitstroom uit uk% is een trafo-klembenadering met een stijve bovenliggende bron; netimpedantie en overige impedanties zijn niet meegenomen.</p>
+          </section>
+        </div>
+
+        <section class="card parallel-card">
+          <div class="section-card-head"><div><span class="micro-label">PARALLEL BEDRIJF</span><h2>Compatibiliteitscheck</h2></div><span class="result-badge" id="parallelBadge">Nog controleren</span></div>
+          <div class="parallel-grid">
+            <div class="parallel-unit"><b>Trafo A</b><label class="mini-field"><span>Vectorgroep</span><select id="pa_group"><option>Dyn11</option><option>Dyn5</option><option>Dyn7</option><option>Dyn1</option><option>YNd11</option><option>YNd5</option><option>Yyn0</option><option>Yyn6</option><option>Dd0</option><option>Dd6</option></select></label><label class="mini-field"><span>LV</span><input id="pa_lv" type="number" value="400"></label><label class="mini-field"><span>uk%</span><input id="pa_uk" type="number" value="6" step="0.1"></label></div>
+            <div class="parallel-unit"><b>Trafo B</b><label class="mini-field"><span>Vectorgroep</span><select id="pb_group"><option>Dyn11</option><option>Dyn5</option><option>Dyn7</option><option>Dyn1</option><option>YNd11</option><option>YNd5</option><option>Yyn0</option><option>Yyn6</option><option>Dd0</option><option>Dd6</option></select></label><label class="mini-field"><span>LV</span><input id="pb_lv" type="number" value="400"></label><label class="mini-field"><span>uk%</span><input id="pb_uk" type="number" value="6" step="0.1"></label></div>
+            <div class="parallel-result" id="parallelResult"></div>
+          </div>
+          <p class="micro-note">Deze check vergelijkt alleen de ingevoerde vectorgroep, secundaire spanning en uk%. Werkelijk parallelbedrijf vereist daarnaast o.a. passende overzetverhouding/tapstand, polariteit/fasevolgorde, impedantieverhouding en systeemvoorwaarden. Schneider noemt gelijke faseverschuiving als essentiële voorwaarde.</p>
+        </section>
+
+        <section class="card phase-sync-card" id="phaseSyncCard">
+          <div class="section-card-head">
+            <div><span class="micro-label">PHASESYNC</span><h2>Interactieve trafo-koppelassistent</h2><p class="muted">Vergelijk twee klokgroepen en laat ElektroToolbox een externe fasepermutatie zoeken die de fasehoek uitlijnt. Kleuren en terminalnamen blijven altijd zichtbaar.</p></div>
+            <span class="result-badge" id="phaseSyncBadge">Berekenen…</span>
+          </div>
+          <div class="phase-sync-controls">
+            <div class="phase-sync-transformer">
+              <span class="micro-label">REFERENTIE / BUS</span><b>Trafo A</b>
+              <label class="mini-field"><span>Vectorgroep</span><select id="tc_group_a">
+                <option>Dyn11</option><option>Dyn7</option><option>Dyn5</option><option>Dyn1</option>
+                <option>YNd11</option><option>YNd7</option><option>YNd5</option><option>YNd1</option>
+                <option>Yd11</option><option>Yd7</option><option>Yd5</option><option>Yd1</option>
+                <option>Yyn0</option><option>Yyn6</option><option>Dd0</option><option>Dd6</option>
+              </select></label>
+            </div>
+            <div class="phase-sync-arrow">→</div>
+            <div class="phase-sync-transformer">
+              <span class="micro-label">AAN TE PASSEN</span><b>Trafo B</b>
+              <label class="mini-field"><span>Vectorgroep</span><select id="tc_group_b">
+                <option>Dyn11</option><option selected>Dyn5</option><option>Dyn7</option><option>Dyn1</option>
+                <option>YNd11</option><option>YNd7</option><option>YNd5</option><option>YNd1</option>
+                <option>Yd11</option><option>Yd7</option><option>Yd5</option><option>Yd1</option>
+                <option>Yyn0</option><option>Yyn6</option><option>Dd0</option><option>Dd6</option>
+              </select></label>
+            </div>
+            <div class="phase-sync-summary" id="phaseSyncSummary"></div>
+          </div>
+
+          <div class="clock-route-panel">
+            <div><span class="micro-label">12-KLOKKEN ROUTEMATRIX</span><b>Welke klokgroepen zijn extern uit te lijnen?</b><small>Gebaseerd op alleen fasepermutatie; wikkel-/nulpunttopologie blijft apart te beoordelen.</small></div>
+            <div class="clock-route-grid" id="phaseClockMatrix"></div>
+          </div>
+
+          <div class="phase-color-workbench">
+            <div class="phase-color-head"><div><span class="micro-label">KLEURIDENTIFICATIE</span><b>HV / primair</b></div><select id="tc_hv_palette"></select></div>
+            <div class="phase-color-inputs" id="tcHvColors">
+              <label><span>L1</span><input type="color" id="tc_hv_l1"></label><label><span>L2</span><input type="color" id="tc_hv_l2"></label><label><span>L3</span><input type="color" id="tc_hv_l3"></label>
+            </div>
+            <div class="phase-color-head"><div><span class="micro-label">KLEURIDENTIFICATIE</span><b>LV / secundair</b></div><select id="tc_lv_palette"></select></div>
+            <div class="phase-color-inputs" id="tcLvColors">
+              <label><span>L1</span><input type="color" id="tc_lv_l1"></label><label><span>L2</span><input type="color" id="tc_lv_l2"></label><label><span>L3</span><input type="color" id="tc_lv_l3"></label>
+            </div>
+            <div class="phase-color-actions"><button type="button" class="btn btn-secondary" id="savePhaseColorsBtn">Bewaar als mijn kleurvoorkeur</button><span>Presets zijn herkenningshulpen; terminalnamen blijven leidend.</span></div>
+          </div>
+
+          <div class="phase-sync-diagrams">
+            <article class="terminal-map-panel"><div class="terminal-map-head"><div><span class="micro-label">HV / PRIMAIR</span><h3>Bus → trafo B</h3></div><span id="hvPermutationBadge" class="formula-pill">—</span></div><div id="hvTerminalMap" class="terminal-map"></div><div id="hvMappingText" class="mapping-chips"></div></article>
+            <article class="terminal-map-panel"><div class="terminal-map-head"><div><span class="micro-label">LV / SECUNDAIR</span><h3>Trafo B → bus</h3></div><span id="lvPermutationBadge" class="formula-pill">—</span></div><div id="lvTerminalMap" class="terminal-map"></div><div id="lvMappingText" class="mapping-chips"></div></article>
+          </div>
+
+          <div class="phase-sync-checks" id="phaseSyncChecks"></div>
+
+          <div class="commissioning-card">
+            <div><span class="micro-label">PHASING PROOF</span><h3>Controle vóór koppelen</h3><p>Leg gemeten spanning over de open koppeling vast. De ingestelde tolerantie is alleen een werkinstelling; volg altijd de bedrijfs- en veiligheidsprocedure.</p></div>
+            <div class="commissioning-grid">
+              <label class="mini-field"><span>L1 ↔ L1</span><div class="input-unit"><input id="cp_v1" type="number" value="0" step="0.1"><em>V</em></div></label>
+              <label class="mini-field"><span>L2 ↔ L2</span><div class="input-unit"><input id="cp_v2" type="number" value="0" step="0.1"><em>V</em></div></label>
+              <label class="mini-field"><span>L3 ↔ L3</span><div class="input-unit"><input id="cp_v3" type="number" value="0" step="0.1"><em>V</em></div></label>
+              <label class="mini-field"><span>Tolerantie</span><div class="input-unit"><input id="cp_tol" type="number" value="5" min="0" step="0.1"><em>V</em></div></label>
+              <label class="mini-field"><span>Draaiveld gecontroleerd</span><select id="cp_rotation"><option value="no">Nog niet</option><option value="yes">Ja, gelijk</option><option value="reverse">Afwijkend</option></select></label>
+            </div>
+            <div id="commissioningResult" class="commissioning-result"></div>
+            <div class="form-actions"><button type="button" class="btn btn-secondary" id="savePhaseSyncBtn">+ Koppelplan naar project</button></div>
+          </div>
+
+          <p class="micro-note">PhaseSync visualiseert externe fasepermutaties. Een gevonden fase-uitlijning is géén automatische goedkeuring voor parallelbedrijf: controleer o.a. overzetverhouding/tapstand, polariteit, fasevolgorde, impedantie, nulpunts-/zero-sequence-eigenschappen, beveiliging en de lokale bedrijfsprocedure.</p>
+        </section>
+      </section>
+
+      <section class="view" id="view-measurements">
+        <div class="page-head">
+          <div><span class="eyebrow">Vastleggen</span><h1>Metingen</h1><p>Leg losse meetwaarden vast zonder eerst een calculator te gebruiken.</p></div>
+          <button class="btn btn-primary" id="newMeasurementBtn">+ Nieuwe meting</button>
+        </div>
+        <div class="card table-card">
+          <div class="table-toolbar"><div><b id="measurementProjectLabel">Geen actief project</b><small>Meetwaarden worden opgeslagen in het actieve project.</small></div></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Type</th><th>Waarde</th><th>Object / punt</th><th>Beoordeling</th><th>Datum</th><th></th></tr></thead><tbody id="measurementRows"></tbody></table></div>
+          <div class="empty-state" id="measurementEmpty"><span>◫</span><h3>Nog geen metingen</h3><p>Leg bijvoorbeeld spanning, stroom, isolatieweerstand, lusimpedantie of aardweerstand vast.</p></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-projects">
+        <div class="page-head">
+          <div><span class="eyebrow">Dossiers</span><h1>Projecten</h1><p>Alle berekeningen, metingen en foutanalyses per opdracht bij elkaar.</p></div>
+          <button class="btn btn-primary" id="newProjectBtn">+ Nieuw project</button>
+        </div>
+        <div class="project-grid" id="projectGrid"></div>
+        <div class="empty-state card" id="projectEmpty"><span>▦</span><h3>Nog geen projecten</h3><p>Maak je eerste project. Alles blijft lokaal op dit apparaat.</p><button class="btn btn-primary" id="projectEmptyCreate">Maak project</button></div>
+      </section>
+
+      <section class="view" id="view-report">
+        <div class="page-head no-print">
+          <div><span class="eyebrow">Dossieroutput</span><h1>MeetRapport</h1><p>Van ruwe velddata naar een strak overdraagbaar rapport.</p></div>
+          <div class="head-actions"><button class="btn btn-secondary" id="shareReportBtn">Delen</button><button class="btn btn-primary" id="printReportBtn">PDF / Print</button></div>
+        </div>
+        <article class="report-paper" id="reportPaper">
+          <div class="report-cover">
+            <div class="report-brand"><span class="brand-mark small"><span>⚡</span></span><div><b id="reportCompany">ElektroToolbox</b><small>Technisch meetrapport</small></div></div>
+            <span class="report-ref" id="reportReference">—</span>
+          </div>
+          <div id="reportHeader"></div>
+          <div class="report-summary-grid" id="reportSummary"></div>
+          <div class="report-section"><div class="report-section-title"><span>01</span><h2>Projectgegevens</h2></div><div id="reportProjectDetails" class="report-detail-grid"></div></div>
+          <div class="report-section"><div class="report-section-title"><span>02</span><h2>Resultaten & metingen</h2></div><div id="reportEntries"></div><div class="empty-report" id="reportEmpty">Nog geen resultaten toegevoegd aan dit project.</div></div>
+          <div class="report-section"><div class="report-section-title"><span>03</span><h2>Conclusie / notitie</h2></div><div class="report-conclusion" id="reportConclusion">—</div></div>
+          <div class="report-signoff"><div><small>Technicus</small><b id="reportTechnician">—</b></div><div><small>Rapportdatum</small><b id="reportDate">—</b></div></div>
+          <footer class="report-footer">Gegenereerd met ElektroToolbox v6 • Controleer meetopstelling, invoer en uitkomsten vóór technische besluitvorming.</footer>
+        </article>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="page-head"><div><span class="eyebrow">Voorkeuren</span><h1>Instellingen</h1><p>Personaliseer rapporten en beheer lokale gegevens.</p></div></div>
+        <div class="settings-grid">
+          <section class="card settings-card"><h2>Rapportprofiel</h2><p>Deze gegevens verschijnen op nieuwe rapporten.</p><div class="field-grid"><label class="field"><span>Bedrijfsnaam</span><input id="set_company" placeholder="Bijv. Van der Put Elektrotechniek"></label><label class="field"><span>Technicus</span><input id="set_technician" placeholder="Naam"></label><label class="field"><span>E-mail</span><input id="set_email" type="email" placeholder="naam@bedrijf.nl"></label><label class="field"><span>Telefoon</span><input id="set_phone" placeholder="06 …"></label></div><button class="btn btn-primary" id="saveSettingsBtn">Instellingen opslaan</button></section>
+          <section class="card settings-card"><h2>Lokale data</h2><p>Maak een back-up of zet je complete lokale dataset terug.</p><div class="stack-actions"><button class="btn btn-secondary" id="exportDataBtn">Exporteer back-up (.json)</button><button class="btn btn-secondary" id="importDataBtn">Importeer back-up</button><input id="importDataFile" type="file" accept="application/json" hidden><button class="btn btn-danger" id="resetDataBtn">Wis alle lokale data</button></div></section>
+          <section class="card settings-card"><h2>App</h2><p>Installeren als PWA geeft sneller starten en een app-icoon op je beginscherm.</p><div class="stack-actions"><button class="btn btn-secondary" id="installAppBtn" disabled>Installatie niet beschikbaar</button><button class="btn btn-secondary" id="exportActiveProjectBtn">Exporteer actief project</button></div><div class="privacy-note"><b>Local-first.</b> Deze versie heeft geen serveraccount en verzendt projectdata niet automatisch.</div></section>
+          <section class="card settings-card phase-pref-card"><h2>Fasekleur-voorkeur</h2><p>TrafoLab gebruikt deze kleuren als standaard voor primaire en secundaire fasen. Je kunt ze in PhaseSync per zijde aanpassen en opslaan.</p><div id="settingsPhasePreview" class="settings-phase-preview"></div><button class="btn btn-secondary" type="button" id="openPhaseSyncBtn">Open PhaseSync kleurwerkbank</button></section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Mobiele navigatie">
+    <button class="active" data-view="dashboard"><span>⌂</span><b>Home</b></button>
+    <button data-view="calculators"><span>∑</span><b>Tools</b></button>
+    <button data-view="fault"><span>⌁</span><b>Kabel</b></button>
+    <button data-view="transformers"><span>⟳</span><b>Trafo</b></button>
+    <button type="button" id="mobileMoreBtn"><span>⋯</span><b>Meer</b></button>
+  </nav>
+
+  <dialog class="modal" id="projectDialog">
+    <form method="dialog" class="modal-card" id="projectForm">
+      <div class="modal-head"><div><span class="eyebrow">Project</span><h2 id="projectDialogTitle">Nieuw project</h2></div><button type="button" class="icon-btn" data-close-dialog aria-label="Sluiten">×</button></div>
+      <input type="hidden" id="projectEditId">
+      <div class="field-grid">
+        <label class="field full"><span>Projectnaam *</span><input id="p_name" required placeholder="Bijv. Kabelstoring Ringbaan-West"></label>
+        <label class="field"><span>Opdrachtgever</span><input id="p_client" placeholder="Bedrijf / klant"></label>
+        <label class="field"><span>Referentie</span><input id="p_reference" placeholder="Werkorder / ticket"></label>
+        <label class="field full"><span>Locatie</span><input id="p_location" placeholder="Straat, station of object"></label>
+        <label class="field"><span>Kabel / object</span><input id="p_asset" placeholder="Bijv. 4x150 Al"></label>
+        <label class="field"><span>Technicus</span><input id="p_technician" placeholder="Naam"></label>
+        <label class="field full"><span>Conclusie / projectnotitie</span><textarea id="p_note" rows="4" placeholder="Korte context, conclusie of overdrachtsnotitie"></textarea></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="btn btn-secondary" data-close-dialog>Annuleren</button><button type="submit" class="btn btn-primary">Project opslaan</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="modal tool-modal" id="toolDialog">
+    <form method="dialog" class="modal-card tool-modal-card" id="toolForm">
+      <div class="modal-head"><div><span class="eyebrow" id="toolCategoryLabel">Calculator</span><h2 id="toolTitle">Tool</h2><p id="toolSubtitle"></p></div><button type="button" class="icon-btn" data-close-dialog aria-label="Sluiten">×</button></div>
+      <div id="toolContent"></div>
+      <div class="tool-result-panel" id="toolResultPanel"><span>Vul waarden in en bereken.</span></div>
+      <div class="modal-actions tool-actions"><button type="button" class="btn btn-secondary" id="toolSaveBtn" disabled>+ Project</button><button type="submit" class="btn btn-primary">Bereken</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="measurementDialog">
+    <form method="dialog" class="modal-card" id="measurementForm">
+      <div class="modal-head"><div><span class="eyebrow">Meting</span><h2>Meetwaarde vastleggen</h2></div><button type="button" class="icon-btn" data-close-dialog aria-label="Sluiten">×</button></div>
+      <div class="field-grid">
+        <label class="field"><span>Type</span><select id="m_type"><option>Spanning</option><option>Stroom</option><option>Weerstand</option><option>Isolatieweerstand</option><option>Lusimpedantie</option><option>Aardweerstand</option><option>Frequentie</option><option>Vermogen</option><option>Temperatuur</option><option>Overig</option></select></label>
+        <label class="field"><span>Waarde *</span><input id="m_value" required inputmode="decimal" placeholder="Bijv. 0,38 Ω"></label>
+        <label class="field full"><span>Object / meetpunt</span><input id="m_point" placeholder="Bijv. eindmof fase L2"></label>
+        <label class="field"><span>Beoordeling</span><select id="m_status"><option value="info">Gemeten</option><option value="ok">Akkoord</option><option value="attention">Aandacht</option><option value="fail">Afwijking</option></select></label>
+        <label class="field"><span>Meetmiddel</span><input id="m_instrument" placeholder="Merk / type / serienr."></label>
+        <label class="field full"><span>Notitie</span><textarea id="m_note" rows="3" placeholder="Omstandigheden of toelichting"></textarea></label>
+      </div>
+      <div class="modal-actions"><button type="button" class="btn btn-secondary" data-close-dialog>Annuleren</button><button type="submit" class="btn btn-primary">Meting opslaan</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="helpDialog">
+    <div class="modal-card">
+      <div class="modal-head"><div><span class="eyebrow">Kabelfout</span><h2>Werkwijze & aannames</h2></div><button class="icon-btn" onclick="document.getElementById('helpDialog').close()" aria-label="Sluiten">×</button></div>
+      <div class="help-copy">
+        <p><b>Lusmethode:</b> maak aan de verre zijde een laagohmige lus tussen de gekozen gezonde lusader en de stroom-/foutader. Sluit de DC-bron aan de meetzijde tussen diezelfde twee aders aan. De fout zelf voert hierbij niet de meetstroom.</p>
+        <p><b>Uv1:</b> meet aan de meetzijde tussen de stroom-/foutader en de gekozen meetreferentie. <b>Uvt:</b> meet aan de meetzijde over de volledige stroomlus. Bij de hier gebruikte opstelling wordt <b>Uv2 = Uvt/2 − Uv1</b>; Uv2 hoort bij hetzelfde aderpaar aan de verre zijde en kan daar als controle worden nagemeten.</p>
+        <p><b>Directe methode:</b> de assistent markeert U1 aan de meetzijde en U2 aan de verre zijde van het gekozen aderpaar. Gebruik deze rekenroute alleen wanneer die opstelling overeenkomt met jouw gevalideerde tweedraadsprocedure.</p>
+        <p>De rekenmodule gebruikt soortelijke weerstand bij 20 °C. Contactweerstanden, verbindingen, temperatuur en afwijkende meetopstellingen kunnen de werkelijke foutpositie beïnvloeden.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal v5-command-center" id="commandDialog">
+    <div class="modal-card command-card">
+      <div class="command-head">
+        <div><span class="eyebrow">FIELD OS</span><h2>Command Center</h2><p>Spring direct naar een werkruimte of actie.</p></div>
+        <button type="button" class="icon-btn" id="commandClose" aria-label="Sluiten">×</button>
+      </div>
+      <div class="command-search"><span>⌕</span><input id="commandSearch" type="search" placeholder="Zoek: trafo, kabel, rapport, project…" autocomplete="off"><kbd>ESC</kbd></div>
+      <div class="command-grid" id="commandGrid">
+        <button data-command-view="dashboard"><span>⌂</span><div><b>Dashboard</b><small>Overzicht & recente activiteit</small></div></button>
+        <button data-command-view="calculators"><span>∑</span><div><b>Calculators</b><small>25 technische tools</small></div></button>
+        <button data-command-view="fault"><span>⌁</span><div><b>Kabelfout Assistent</b><small>Guided lus & direct</small></div></button>
+        <button data-command-view="transformers"><span>⟳</span><div><b>TrafoLab + PhaseSync</b><small>Vectorgroepen & koppelen</small></div></button>
+        <button data-command-view="measurements"><span>◫</span><div><b>Metingen</b><small>Meetwaarden vastleggen</small></div></button>
+        <button data-command-view="projects"><span>▦</span><div><b>Projecten</b><small>Dossiers beheren</small></div></button>
+        <button data-command-view="report"><span>▤</span><div><b>MeetRapport</b><small>Projectoutput & PDF</small></div></button>
+        <button data-command-view="settings"><span>⚙</span><div><b>Instellingen</b><small>Profiel, kleuren & data</small></div></button>
+        <button data-command-action="project"><span>＋</span><div><b>Nieuw project</b><small>Start een nieuw dossier</small></div></button>
+        <button data-command-action="measurement"><span>＋</span><div><b>Nieuwe meting</b><small>Leg direct een waarde vast</small></div></button>
+      </div>
+      <div class="command-foot"><span><kbd>⌘/Ctrl</kbd> + <kbd>K</kbd> overal beschikbaar</span><span>ElektroToolbox v6.1 · Hyperfield</span></div>
+    </div>
+  </dialog>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="assets/calc-engine.js?v=6.1.1"></script>
+  <script src="assets/app.js?v=6.1.1"></script>
+  <script src="assets/v6-hyperfield.js?v=6.1.1"></script>
+</body>
+</html>
